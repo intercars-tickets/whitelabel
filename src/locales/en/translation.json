@@ -1,0 +1,15 @@
+{
+  "__commonText__": "translation for common forms and other common cases",
+  "commonText": {
+    "email": "email",
+    "password": "password"
+  },
+
+  "__LeftMenu__": "Left menu",
+  "leftMenu": {
+    "home": "Home",
+    "whitelabel": "Whitelabel",
+    "tools": "Tools",
+    "f": "Tools"
+  }
+}

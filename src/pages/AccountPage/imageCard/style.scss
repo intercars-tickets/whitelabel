@@ -1,0 +1,42 @@
+@import "../../../scss/default-variables.scss";
+@import "../../../scss/common-styles.scss";
+
+.intercars-image-card-container {
+  @extend .common-style-item;
+  @extend .common-flex-column-container;
+  min-width: 300px;
+  max-width: 330px;
+   //max-height: 500px;
+  padding: 16px;
+  gap:10px;
+
+  //align-items: center;
+  [typeof = "header"] {
+    //background: greenyellow;
+    color:#344767;
+    font-size: 1.5rem;
+   // text-decoration: underline;
+  }
+  [typeof = "text"] {
+    //background: greenyellow;
+    color:#6c7992;
+  }
+  [typeof = "image"] {
+    display:flex;
+    flex-direction: column;
+    //background: greenyellow;
+    justify-items: center;
+    border-radius: 10px;
+    //padding: 8px 8px;
+    img{
+      border-radius: 10px;
+     // max-width: 450px;
+
+    }
+  }
+
+}
+
+.intercars-image-card-header{
+
+}

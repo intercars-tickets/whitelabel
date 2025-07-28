@@ -1,0 +1,58 @@
+.account-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.acc-info-container {
+  display: flex;
+  flex-direction: column;
+  //background-color: #0243a6;
+  gap: 2px;
+}
+
+.account-info-item {
+  background-color: #0243a6;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  height: 100px;
+}
+
+.account-info-sub-item {
+ position: relative;
+  margin:15px 25px;
+  padding: 16px 24px;
+  background-color: white;
+  flex-direction: row;
+  display: flex;
+  transform: translate(0px, -35px);
+}
+
+.account-card-container {
+  padding: 16px 24px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  [typeof = 'label'] {
+    position: absolute;
+    transform: translate(20px, -30px);
+    background-color: #217dff;
+    width: 200px;
+    border-radius: 5px;
+    padding: 2px 16px;
+  }
+
+}
+
+.account-card-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+
+
+}

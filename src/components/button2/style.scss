@@ -1,0 +1,16 @@
+
+
+.intercars-button2{
+  //background-color: #e23f35;
+  background-color: #ff690c;
+
+
+  height: 36px;
+  min-width: 75px;
+  border-radius: 6px;
+  color: #fff;
+
+  &:hover{
+    background-color:darken(#ff690c, 10);
+  }
+}

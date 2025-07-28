@@ -1,0 +1,66 @@
+@import "../../scss/common-styles";
+
+.input-text-container {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  width: 100%;
+  max-width: 800px;
+  //background-color: darkorange;
+  border: 1px solid #0243a6;
+  border-radius: 6px;
+  height: 36px;
+  &__first{
+    background-color: green;
+  }
+  & [typeof = "last"]{
+    background-color: #988d58;
+  }
+}
+
+
+.input-text-component-label{
+  align-self: center;
+  position: absolute;
+  transform:scale(75%) translate(15px, -100%);
+  background-color: white;
+  transition: transform 5s;
+  padding: 8px 8px;
+  //color :red;
+  &__active{
+    background-color: $primary-color;
+    color :red;
+  }}
+
+
+.input-text-custom-item{
+  display: flex;
+  flex-direction: row;
+  @extend .common-input;
+  padding: 0 14px ;
+  background-color: #FFFFFF;
+  //background-color: #0243a6;
+
+
+  //border : 1px solid #dee2e6;
+  border-radius: 5px;
+  & [name = "first"]{
+    background-color: #D24A43;
+  }
+  &:focus-within{
+    @extend .common-input-focus
+  }
+  input {
+    border:none;
+    &::placeholder{
+      font-style: italic;
+    }
+    padding: 10px 0;
+    &:focus  {
+      .dropdown-input-text-container-content{
+        display: block!important;
+      }
+      display: block;
+    }
+  }
+}

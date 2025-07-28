@@ -1,0 +1,86 @@
+@import "../../../scss/common-styles.scss";
+@import "../../../scss/default-variables";
+
+.input-city-container{
+  position: relative;
+  display: inline-block;
+  //background-color: white;
+}
+
+.input-city-item {
+  @extend .common-input;
+  display: flex;
+  flex-direction: row;
+  padding: 0 16px ;
+  border : 1px solid #dee2e6;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  height: 35px;
+
+  &:focus-within{
+    @extend .common-input-focus;
+  }
+
+  &:focus-within .input-city-select {
+    display: block;
+  }
+
+  input {
+
+    &::placeholder{
+      font-style: italic;
+    }
+    padding: 8px 2px;
+    &:focus  {
+      .input-city-select{
+        display: block!important;
+      }
+      display: block;
+
+    }
+  }
+}
+
+.input-city-select {
+  //display: none;
+  position: absolute;
+  border-radius: 10px;
+  margin-top: 45px;
+  margin-left: -20px;
+  border: 2px solid  darken($primary-color,5);
+  //height: 200px;
+  color: gray;
+  overflow: auto;
+  background-color: lighten($secondary-surface-colour,15);
+  min-width: 180px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0);
+  padding: 8px 0;
+  z-index: 5;
+  max-height: 250px;
+  list-style-position: inside;
+  list-style-type: circle;
+  &:hover  {
+    display: block;
+  }
+
+  li {
+    border-radius: 5px;
+    padding: 3px 16px;
+    span [type="selectItem"] {
+      font-weight: 600;
+      margin-left: 3px;
+      margin-bottom: 2px;
+    }
+    &:hover {
+      background-color: $primary-color;
+      color: whitesmoke;
+      span[id="selectItem"] {
+        color: whitesmoke;
+      }
+    }
+  }
+}
+
+.clear-input{
+  @extend .common-clear-input;
+}

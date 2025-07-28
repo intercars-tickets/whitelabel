@@ -1,0 +1,53 @@
+@import "../../scss/default-variables.scss";
+@import "../../scss/common-styles.scss";
+
+.input-date-component-container {
+  display: inline-block;
+  width: 200px;
+
+
+  label {
+    pointer-events: none;
+    position: absolute;
+    //right: 0;
+    //top: 0;
+    transition: 0.2s;
+    transform: scale(0.75) translateY(-85%) translateX(15px);
+    opacity: 1;
+    font-size: 1.1rem;
+    font-style: italic;
+    border-radius: 5px;
+    background-color: $primary-color;
+    color: white;
+    padding: 2px 8px;
+  }
+}
+
+.input-date-element {
+  @extend .common-input;
+  height: $height-input-field-desktop;
+  display: flex;
+  flex-direction: row;
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+
+  &:focus-within {
+    @extend .common-input-focus;
+  }
+
+  input[typeof="input-text-date"] {
+    width: 150px;
+
+    &::placeholder {
+      font-style: italic;
+    }
+
+  }
+
+  input[typeof ="input-date-picker"] {
+    margin-right: 2px;
+
+    color: black;
+  }
+}

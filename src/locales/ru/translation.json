@@ -1,0 +1,12 @@
+{
+  "__commonText__": "translation for common forms and other common cases",
+  "commonText": {
+    "email": "email",
+    "password": "Пароль"
+  },
+
+  "__LeftMenu__": "Left menu",
+  "leftMenu": {
+    "home": "Главная"
+  }
+}

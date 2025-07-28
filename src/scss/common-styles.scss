@@ -1,0 +1,74 @@
+@import "./default-variables";
+
+.common-flex-column-container{
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+
+
+.common-flex-row-container{
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: beige;
+}
+
+  input {
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+  }
+
+  button {
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+  }
+
+
+.common-flex-column-container {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.common-style-item{
+  background-color: #FFFFFF;
+  border-radius: 10px;
+}
+
+.common-flex-row-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  @extend .common-style-item;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.03);
+}
+
+.common-vertical-border {
+  border-left: 2px solid rgba(0, 0, 0, 0.2);
+  height: 100%;
+  width: 4px;
+}
+
+.common-input {
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+}
+
+.common-input-focus {
+  color: #212529;
+  background-color: #ffffff;
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+}
+
+.common-clear-input {
+  align-self: center;
+  cursor: pointer;
+  width: 14px;
+}

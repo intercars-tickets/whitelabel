@@ -1,0 +1,17 @@
+//@import "../../../scss/extends.scss";
+//@import "../../../scss/default_variables.scss";
+
+.statistics-page-container{
+  //@extend .common-flex-column-container;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+}
+.statistics-page-row-container{
+ // @extend .common-flex-row-container;
+  display: flex;
+  flex-direction: row;
+  padding:12px 24px;
+  gap: 6px;
+}
