@@ -190,20 +190,24 @@
     border-radius: 7px;
     //background: linear-gradient(130deg, #ff7e00, #ffffff, #5cff00);
     //background-size: 100% 100%;
-    background: linear-gradient(90deg, #0a2b59, #005cde);
+    background-color:  #0243a6;
     color: #ffffff;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     transition: background-color 1s;
     -webkit-transition-duration: 0.4s; /* Safari */
-    box-shadow: 10px 5px 5px red;
 
-    &:active {
-      background: linear-gradient(90deg, red, #005cde);
+    &:hover {
+      background-color: darken( #0243a6,15);
       transition: background-color 1s;
-      box-shadow: 10px 5px 5px red;
     }
+    &:active {
+      background-color: white;
+      color:#0243a6;
+      transition: background-color 0.1s;
+    }
+
   }
 
 }

@@ -257,7 +257,6 @@ export function WidgetApi() {
 
     // const bookTickets = async (request:BookTicketRequest);
 
-
     return {
         searchRoutes,
         searchCity,

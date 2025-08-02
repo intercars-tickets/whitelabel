@@ -1,7 +1,8 @@
 import "./style.scss";
 import {useEffect, useState} from "react";
-import DecrementIcon from '../../../../icons/decrement-icon.svg';
-import IncrementIcon from '../../../../icons/increment-icon.svg';
+import {AccountIcon} from "../../../../icons/AccountIcon";
+import {DecrementIcon} from "../../../../icons/DecrementIcon";
+import {IncrementIcon} from "../../../../icons/IncrementIcon";
 
 
 interface ICounterProps {
@@ -28,10 +29,7 @@ export function Counter ({className, initialStateValue, getCountValue}:ICounterP
                     onClick={() => setCount((prev) => prev - 1)}
                     disabled={count < 1 ? true : false}
             >
-                <img width={24} height={24}
-                     className='counter__icon'
-                     src={DecrementIcon} alt=''
-                />
+                <DecrementIcon/>
             </button>
             <div className='counter__value'>
                 {count}
@@ -39,10 +37,7 @@ export function Counter ({className, initialStateValue, getCountValue}:ICounterP
             <button type='button' name='increment' id='increment'
                     className='counter__btn'
                     onClick={() => setCount((prev) => prev + 1)}>
-                <img width={24} height={24}
-                     className='counter__icon'
-                     src={IncrementIcon} alt=''
-                />
+                <IncrementIcon/>
             </button>
         </div>
     );

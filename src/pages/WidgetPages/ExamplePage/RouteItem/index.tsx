@@ -1,15 +1,16 @@
 import "./style.scss";
-import {CommonRoute} from "../../../../models/Routes/CommonRoute";
+
+import React, {useState} from "react";
 import {DirectionIcon} from "../../../../icons/DirectionIcon";
-import {DateService} from "../../../../services/DateService";
+import {BusIcon} from "../../../../icons/BusIcon";
 import {WifiIcon} from "../../../../icons/WifiIcon";
 import {UsbIcon} from "../../../../icons/UsbIcon";
-import {AirConditionerIcon} from "../../../../icons/AirConditionerIcon";
 import {SuitCaseIcon} from "../../../../icons/SuitCaseIcon";
+import {AirConditionerIcon} from "../../../../icons/AirConditionerIcon";
+import {CommonRoute} from "../../../../models/Routes/CommonRoute";
 import {PointIcon} from "../../../../icons/PointIcon";
 import {VerticalLine} from "../../../../icons/VerticalLine";
-import {useState} from "react";
-import {BusIcon} from "../../../../icons/BusIcon";
+
 
 
 type RouteItemProps = {

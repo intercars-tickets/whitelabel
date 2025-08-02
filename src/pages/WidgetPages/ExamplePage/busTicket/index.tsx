@@ -1,8 +1,8 @@
 import "./style.scss";
 import {useEffect, useState} from "react";
-import BusDriver from "../../../../icons/BusDriver.svg";
 import {IntercarsPlace} from "../../../../models/Routes/IntercarsPlace";
 import {Counter} from "../counter";
+import {BusDriverIcon} from "../../../../icons/BusDriverIcon";
 
 interface IBusPlace {
     Col: number,
@@ -75,7 +75,7 @@ export function BusTicket(props: BusTicketProps) {
     return (
         <div className='bus-ticket'>
             <h2 className='bus-ticket__title'>
-                Выберите места в автобусе {isVisibleWarning?<div style={{color:"red"}}>Нельзя выбрать больше мест, чем пассажиров.</div>:""}
+                Выберите места в автобусе {isVisibleWarning? <div style={{color:"red"}}>Нельзя выбрать больше мест, чем пассажиров.</div>:""}
             </h2>
             <div className='bus-ticket__wrapper'>
                 <div className='bus-ticket-info'>
@@ -91,7 +91,8 @@ export function BusTicket(props: BusTicketProps) {
                 </div>
                 <div className='bus-places'>
                     <div className='bus-places__wrapper'>
-                        <img width={40} height={66} src={BusDriver} className='bus-places__icon' alt=''/>
+                        <BusDriverIcon iconSize="48px"/>
+                        {/*<img width={40} height={66} src={BusDriver} className='bus-places__icon' alt=''/>*/}
                         <div className="bus-component">
                             {floor2Array.map((array, index) => {
                                 const maxCol = Math.max(...array.map(place => place.Col));
@@ -129,7 +130,8 @@ export function BusTicket(props: BusTicketProps) {
                     {floor1Array.length > 0 ? (
                         <>
                             <div className='bus-places__wrapper'>
-                                <img width={40} height={66} src={BusDriver} className='bus-places__icon' alt=''/>
+                                <BusDriverIcon iconSize="48px"/>
+                                {/*<img width={40} height={66} src={BusDriver} className='bus-places__icon' alt=''/>*/}
                                 <div className="bus-component">
 
                                     {floor1Array.map((array, index) => {
