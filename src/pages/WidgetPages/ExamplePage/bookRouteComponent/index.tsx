@@ -4,17 +4,16 @@ import {BusTicket} from "../busTicket";
 import {CommonRoute} from "../../../../models/Routes/CommonRoute";
 import {FullBusPlaces} from "../../../../testData/FullBusPlases";
 import {ContactsUser} from "../contactUser";
-import {InputText2} from "../../../../components/inputText2";
 import {WidgetApi} from "../../../../api/WidgetApi";
 import {BookPassengerInfo} from "../../../../models/Booking/BookPassengerInfo";
 import {IntercarsPlace} from "../../../../models/Routes/IntercarsPlace";
 import {Button} from "../../../../components/button";
-import {SelectGender} from "../../../../components/selectGender";
 import {DateService} from "../../../../services/DateService";
 import {ValidateService} from "../../../../services/ValidateService";
 import {BookTicketRequest} from "../../../../models/Booking/BookTicketRequest";
 import {BookingRouteInfo} from "../../../../models/Routes/BookingRouteInfo";
 import {PaxItem} from "../paxItem";
+import {InputDate} from "../../../../components/inputDate";
 
 interface OptionType {
     value: string;
@@ -57,7 +56,7 @@ const defaultOldPassenger: Passenger = {
     docType: ""
 }
 type BookRouteProps = {
-    routeInfo:BookingRouteInfo
+    routeInfo: BookingRouteInfo
     route?: CommonRoute
     searchId: string
 }
@@ -77,7 +76,7 @@ const pax: BookPassengerInfo = {
 }
 
 const defaultPassenger: BookPassengerInfo = {
-    Birthdate: new Date(1987,6,4),
+    Birthdate: new Date(1987, 6, 4),
     Citizenship: "",
     DocumentId: "",
     DocumentNumber: "",
@@ -106,7 +105,7 @@ type Currency = {
 }
 
 
-export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
+export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
     const {bookRoute, getTariffs, bookTickets} = WidgetApi();
     const {convertDateForForm, convertStringDateForForm} = DateService();
     const {validateEmail} = ValidateService();
@@ -188,18 +187,17 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
             siteVersionId: 1,
             userId: "IntercarsTestWidget"
         }
-        let tarif = routeInfo.Result.Route.Price.find(p=>p.CurrencyName ===currentCurrency) ;
+        let tarif = routeInfo.Result.Route.Price.find(p => p.CurrencyName === currentCurrency);
 
         request.passengers.forEach((passenger) => {
-            passenger.TarifId = tarif?.Currency??routeInfo.Result.Route.Price[0].Currency;
+            passenger.TarifId = tarif?.Currency ?? routeInfo.Result.Route.Price[0].Currency;
         })
-
 
 
         const response = await bookTickets(request);
 
         if (response.Result.result.Response !== null) {
-            window.location.href = response.Result.result.Response ;
+            window.location.href = response.Result.result.Response;
         } else {
             console.log("cannot redirecct")
         }
@@ -212,12 +210,13 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
         console.log("Add [passenger}")
 
         if (action === "add") {
-            setOldPassengers([...oldPassengers, defaultOldPassenger]);
+            //setOldPassengers([...oldPassengers, defaultOldPassenger]);
             setPassengers([...passengers, defaultPassenger]);
             console.log("count pax", oldPassengers.length)
         }
         if (action === "remove") {
-            setOldPassengers(oldPassengers.filter((_, i) => i !== index));
+            //setOldPassengers(oldPassengers.filter((_, i) => i !== index));
+            setPassengers(passengers.filter((_, i) => i !== index));
         }
     }
 
@@ -272,6 +271,11 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
                 passArray[index].DocumentId = value;
                 break;
             }
+            case "tariff": {
+                oldPassArray[index].passportNumber = value;
+                passArray[index].TarifId = Number(value);
+                break;
+            }
 
         }
 
@@ -323,12 +327,12 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
     //console.log(sortedArrays);
     const maxCol = Math.max(...FullBusPlaces.map(place => place.Col));
 
-    const selectedSelectStyle:CSSProperties = {fontWeight: '800'};
+    const selectedSelectStyle: CSSProperties = {fontWeight: '800'};
 
     //console.log(sortedArrays);
     useEffect(() => {
 
-    }, [oldPassengers]);
+    }, [passengers]);
 
     return (<>
             <div className="intercars-book-route-container">
@@ -361,123 +365,16 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
 
                     <div style={{gap: "6px"}}>
                         {passengers && passengers.map((passenger, index) => {
-                            return(<PaxItem
-                                paxCount={oldPassengers.length}
-                                index={index}
-                                pax={passenger}
-                                quantityPaxHandler={quantityPassHandler}
-                                passengersCitizenship={routeInfo.Result.PassengersCitizenship}
-                                updatePaxHandler={updatePassHandler}
-                                docTypes={routeInfo.Result.DocumentTypes}
-                                tariffs={optionsTariff}/>
+                            return (<PaxItem
+                                    paxCount={oldPassengers.length}
+                                    index={index}
+                                    pax={passenger}
+                                    quantityPaxHandler={quantityPassHandler}
+                                    passengersCitizenship={routeInfo.Result.PassengersCitizenship}
+                                    updatePaxHandler={updatePassHandler}
+                                    docTypes={routeInfo.Result.DocumentTypes}
+                                    tariffs={routeInfo.Result.Route.Routes[0].Tariffs}/>
                             )
-                            // return (<>
-                            //         <div className="intercars-book-route-column-sub-container"
-                            //              style={{marginTop: "6px"}}>
-                            //             <div className="intercars-book-route-passenger-number-item">
-                            //                 <div>Пассажир №{index + 1}</div>
-                            //                 {index !== 0 &&
-                            //                     <div typeof="last-item" style={{cursor: "pointer"}}
-                            //                          onClick={() => {
-                            //                              quantityPassHandler('remove', index)
-                            //                          }}
-                            //                     >&#x2715;</div>}
-                            //             </div>
-                            //             <div className="intercars-book-route-input-sub-container">
-                            //                 <div typeof="common-select">
-                            //                     <select
-                            //                         onChange={(e) => {
-                            //                            let country =
-                            //                                routeInfo.Result.PassengersCitizenship.find(c=>c.Name===e.target.value)
-                            //                             updatePassHandler(country?.Abbr??"", "citizenship", index)
-                            //                             console.log(e.target.value)
-                            //                         }}
-                            //                     >
-                            //                         {routeInfo.Result.PassengersCitizenship.map((country, index) => {
-                            //
-                            //
-                            //                             return (<option style={country.Abbr ==="BY"?selectedSelectStyle:{}}>{country.Name}</option>)
-                            //                         })}
-                            //                     </select>
-                            //                 </div>
-                            //                 <div typeof="common-select">
-                            //                     <select
-                            //                         onChange={(e) => {
-                            //                             console.log(e.target.value)
-                            //                         }}
-                            //                     >
-                            //                         {optionsTariff.map((country, index) => {
-                            //                             return (<option>{country.value}</option>)
-                            //                         })}
-                            //                     </select>
-                            //                 </div>
-                            //                 <SelectGender gender={"male"} selectGender={(gender: "male" | "female") => {
-                            //                 }}/>
-                            //             </div>
-                            //             <div className="intercars-book-route-input-sub-container">
-                            //                 <div typeof="common-input">
-                            //                     <InputText2 label="Фамилия" value={passenger.LastName}
-                            //                                 setValue={(value) => {
-                            //                                     updatePassHandler(value, "lastName", index)
-                            //                                 }}/>
-                            //                 </div>
-                            //                 <div typeof="common-input">
-                            //                     <InputText2 label="Имя" value={passenger.FirstName}
-                            //                                 setValue={(value) => {
-                            //                                     updatePassHandler(value, "firstName", index)
-                            //                                 }}/>
-                            //                 </div>
-                            //                 <div typeof="common-input">
-                            //                     <InputText2 label="Отчество" value={passenger.MiddleName}
-                            //                                 setValue={(value) => {
-                            //                                     updatePassHandler(value, "patronymic", index)
-                            //                                 }}/>
-                            //                 </div>
-                            //             </div>
-                            //             <div className="intercars-book-route-input-sub-container">
-                            //                 <div typeof="common-input">
-                            //                     <InputText2 label="Дата рождения"
-                            //                                 value={(convertDateForForm(passenger.Birthdate))}
-                            //                                 placeholder="ДД-MM-ГГГГ"
-                            //                                 maxLength={10}
-                            //                                 setValue={(value) => {
-                            //                                     updatePassHandler(value, "birthDate", index)
-                            //                                 }}/>
-                            //                 </div>
-                            //                 <div typeof="common-select">
-                            //                     <select
-                            //                         defaultValue={"Тип документа"}
-                            //                         onChange={(e) => {
-                            //                             if (e.target.value !== "Тип документа") {
-                            //
-                            //                                 let doc = routeInfo.Result.DocumentTypes.find(doc => doc.Name === e.target.value)
-                            //                                 updatePassHandler(doc?.Id ?? "", "docType", index)
-                            //                                 //console.log(e.target.value)
-                            //                                 console.log(e.target.value)
-                            //                             }
-                            //                         }}
-                            //                     >
-                            //                         <option>{"Тип документа"}</option>
-                            //                         {routeInfo.Result.DocumentTypes.map((doc, index) => {
-                            //                             return (<option>{doc.Name}</option>)
-                            //                         })}
-                            //                     </select>
-                            //                 </div>
-                            //                 <div typeof="common-input">
-                            //                     <InputText2 label="Номер документа" value={passenger.DocumentNumber}
-                            //                                 setValue={(value) => {
-                            //                                     updatePassHandler(value, "docNumber", index)
-                            //                                 }}/>
-                            //                 </div>
-                            //                 {}
-                            //             </div>
-                            //             {(oldPassengers.length === index + 1) && <div style={{marginLeft: "auto"}}>
-                            //                 <Button title="+ Add passenger "
-                            //                         onClick={() => quantityPassHandler("add")}/>
-                            //             </div>}
-                            //         </div>
-                            //     </>
-                            // )
                         })
                         }
 
@@ -503,7 +400,10 @@ export function BookRouteComponent({ searchId, routeInfo}: BookRouteProps) {
                             }}
                             style={{width: "150px", height: "56px", backgroundColor: "#0243a6", color: "white"}}>Book
                     </button>
-                    <Button title="Book"/>
+                    <Button title="Book" onClick={()=>{
+                        console.log("PaxDate",passengers[0]);
+                        console.log("CurrentCurrency",currentCurrency);
+                    }}/>
                 </form>
 
 

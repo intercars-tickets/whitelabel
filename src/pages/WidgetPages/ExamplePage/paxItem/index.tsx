@@ -3,16 +3,11 @@ import {InputText2} from "../../../../components/inputText2";
 import {Button} from "../../../../components/button";
 import {Citizenship} from "../../../../models/Routes/Citizenship";
 import {CSSProperties} from "react";
-import {Passenger} from "../../../../models/Routes/Passenger";
 import {BookPassengerInfo} from "../../../../models/Booking/BookPassengerInfo";
 import {DocumentType} from "../../../../models/Routes/DocumentType";
 import {DateService} from "../../../../services/DateService";
-
-interface OptionType {
-    value: string;
-    label: string;
-}
-
+import {InputDate} from "../../../../components/inputDate";
+import {Tariff} from "../../../../models/Routes/Tariff";
 
 type PaxItemProps = {
     paxCount: number,
@@ -22,7 +17,7 @@ type PaxItemProps = {
     passengersCitizenship: Citizenship[],
     updatePaxHandler: (value: string, type: string, index: number) => void
     docTypes: DocumentType[],
-    tariffs: OptionType[]
+    tariffs: Tariff[]
 }
 
 export function PaxItem({
@@ -65,20 +60,21 @@ export function PaxItem({
                     >
                         {passengersCitizenship.map((country, index) => {
 
-
                             return (<option
                                 style={country.Abbr === "BY" ? selectedSelectStyle : {}}>{country.Name}</option>)
                         })}
                     </select>
                 </div>
+
                 <div typeof="common-select">
                     <select
                         onChange={(e) => {
-                            console.log(e.target.value)
+                            let tariff = tariffs.findIndex(c => c.Name === e.target.value)
+                            updatePaxHandler(tariff.toString(),"tariff", index)
                         }}
                     >
-                        {tariffs.map((country, index) => {
-                            return (<option>{country.value}</option>)
+                        {tariffs.map((t, index) => {
+                            return (<option>{t.Name}</option>)
                         })}
                     </select>
                 </div>
@@ -107,13 +103,16 @@ export function PaxItem({
             </div>
             <div className="intercars-book-route-input-sub-container">
                 <div typeof="common-input">
-                    <InputText2 label="Дата рождения"
-                                value={(convertDateForForm(pax.Birthdate))}
-                                placeholder="ДД-MM-ГГГГ"
-                                maxLength={10}
-                                setValue={(value) => {
-                                    updatePaxHandler(value, "birthDate", index)
-                                }}/>
+                    <InputDate setDateHandler={(date:string)=>{
+                        updatePaxHandler(date,"birthDate",index)
+                    }}/>
+                    {/*<InputText2 label="Дата рождения"*/}
+                    {/*            value={(convertDateForForm(pax.Birthdate))}*/}
+                    {/*            placeholder="ДД-MM-ГГГГ"*/}
+                    {/*            maxLength={10}*/}
+                    {/*            setValue={(value) => {*/}
+                    {/*                updatePaxHandler(value, "birthDate", index)*/}
+                    {/*            }}/>*/}
                 </div>
                 <div typeof="common-select">
                     <select
