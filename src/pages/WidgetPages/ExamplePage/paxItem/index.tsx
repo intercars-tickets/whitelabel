@@ -55,7 +55,7 @@ export function PaxItem({
                             let country =
                                 passengersCitizenship.find(c => c.Name === e.target.value)
                             updatePaxHandler(country?.Abbr ?? "", "citizenship", index)
-                            console.log(e.target.value)
+                            //console.log(e.target.value)
                         }}
                     >
                         {passengersCitizenship.map((country, index) => {
@@ -78,7 +78,10 @@ export function PaxItem({
                         })}
                     </select>
                 </div>
-                <SelectGender gender={"male"} selectGender={(gender: "male" | "female") => {
+                <SelectGender gender={"male"} selectGender={(value: "male" | "female") => {
+
+                    updatePaxHandler(value,"gender", index)
+
                 }}/>
             </div>
             <div className="intercars-book-route-input-sub-container">
@@ -103,27 +106,17 @@ export function PaxItem({
             </div>
             <div className="intercars-book-route-input-sub-container">
                 <div typeof="common-input">
-                    <InputDate setDateHandler={(date:string)=>{
-                        updatePaxHandler(date,"birthDate",index)
+                    <InputDate setDateHandler={(date:Date|undefined)=>{
+                        updatePaxHandler(convertDateForForm(date),"birthDate",index)
                     }}/>
-                    {/*<InputText2 label="Дата рождения"*/}
-                    {/*            value={(convertDateForForm(pax.Birthdate))}*/}
-                    {/*            placeholder="ДД-MM-ГГГГ"*/}
-                    {/*            maxLength={10}*/}
-                    {/*            setValue={(value) => {*/}
-                    {/*                updatePaxHandler(value, "birthDate", index)*/}
-                    {/*            }}/>*/}
-                </div>
+                                   </div>
                 <div typeof="common-select">
                     <select
                         defaultValue={"Тип документа"}
                         onChange={(e) => {
                             if (e.target.value !== "Тип документа") {
-
                                 let doc = docTypes.find(doc => doc.Name === e.target.value)
                                 updatePaxHandler(doc?.Id ?? "", "docType", index)
-                                //console.log(e.target.value)
-                                console.log(e.target.value)
                             }
                         }}
                     >

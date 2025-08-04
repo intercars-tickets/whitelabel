@@ -13,30 +13,6 @@ import {ValidateService} from "../../../../services/ValidateService";
 import {BookTicketRequest} from "../../../../models/Booking/BookTicketRequest";
 import {BookingRouteInfo} from "../../../../models/Routes/BookingRouteInfo";
 import {PaxItem} from "../paxItem";
-import {InputDate} from "../../../../components/inputDate";
-
-interface OptionType {
-    value: string;
-    label: string;
-}
-
-const optionsCountry: OptionType[] = [
-    {value: 'Беларусь', label: 'BY'},
-    {value: 'Россия', label: 'Россия'},
-    {value: 'Латвия', label: 'Латвия'},
-    {value: 'Китай', label: 'Китай'},
-    {value: 'Эстония', label: 'Эстония'},]
-
-const optionsTariff: OptionType[] = [
-    {value: 'DT(до 12лет)', label: 'DT(до 12лет)'},
-    {value: 'ET(12-26лет)', label: 'ET(12-26лет)'},
-    {value: 'PT(27-59лет)', label: 'PT(27-59лет)'},
-    {value: 'ET(более 60лет)', label: 'ET(более 60лет)'}
-]
-
-const optionsTypeDocument: OptionType[] = [
-    {value: 'Паспорт', label: 'Паспорт'}
-]
 
 interface Passenger {
     firstName: string;
@@ -61,22 +37,8 @@ type BookRouteProps = {
     searchId: string
 }
 
-const pax: BookPassengerInfo = {
-    Birthdate: new Date(1986, 6, 4),
-    Citizenship: "BY",
-    DocumentId: "1",
-    DocumentNumber: "BM250225",
-    FirstName: "Сергей",
-    Gender: "M",
-    HasBonus: false,
-    LastName: "Хинкевич",
-    MiddleName: "Владимирович",
-    PlaceNumber: 5,
-    TarifId: 3
-}
-
 const defaultPassenger: BookPassengerInfo = {
-    Birthdate: new Date(1987, 6, 4),
+    Birthdate: new Date(),
     Citizenship: "",
     DocumentId: "",
     DocumentNumber: "",
@@ -120,8 +82,9 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
     const [currentCurrency, setCurrentCurrency] = useState("")
 
 
-    console.log(routeInfo.Result.Route?.Id)
-    console.log(searchId)
+    const {convertToDateFromForm}=DateService();
+    //console.log(routeInfo.Result.Route?.Id)
+    //console.log(searchId)
 
     const userId = 'd02ae181-c17a-42e1-97be-e791cb20dd4b';
 
@@ -199,20 +162,20 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
         if (response.Result.result.Response !== null) {
             window.location.href = response.Result.result.Response;
         } else {
-            console.log("cannot redirecct")
+           // console.log("cannot redirecct")
         }
 
-        console.log('BookRouteResponse', response)
+       // console.log('BookRouteResponse', response)
     }
 
     //add or remove additional passenger
     const quantityPassHandler = (action: string, index: number = 0) => {
-        console.log("Add [passenger}")
+       //console.log("Add [passenger}")
 
         if (action === "add") {
             //setOldPassengers([...oldPassengers, defaultOldPassenger]);
             setPassengers([...passengers, defaultPassenger]);
-            console.log("count pax", oldPassengers.length)
+            //console.log("count pax", oldPassengers.length)
         }
         if (action === "remove") {
             //setOldPassengers(oldPassengers.filter((_, i) => i !== index));
@@ -223,65 +186,54 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
     //update pax data
     const updatePassHandler = (value: string, type: string, index: number) => {
 
-        console.log("PassengerHandler", value, index);
+        //console.log("PassengerHandler", value,type, index);
 
-        let oldPassArray = [...oldPassengers]
         let passArray = [...passengers]
 
         switch (type) {
             case "lastName": {
-
-                console.log("input last name")
-                // oldPassArray[index].lastName = value;
                 passArray[index].LastName = value;
-                console.log("input lastNAme", value, index);
                 break;
             }
             case "patronymic": {
-                oldPassArray[index].patronymic = value;
                 passArray[index].MiddleName = value;
                 break;
             }
             case "firstName": {
-                oldPassArray[index].firstName = value;
                 passArray[index].FirstName = value;
                 break;
             }
             case "birthDate": {
-
-                let dateValue = convertStringDateForForm(value, oldPassArray[index].dateOfBirth)
-                console.log("date from method", dateValue)
-
-                // oldPassArray[index].dateOfBirth = convertDateForForm(value, oldPassArray[index].dateOfBirth)
+                let dateValue = convertToDateFromForm(value)
+                if (dateValue !== undefined) {
+                    passengers[index].Birthdate = dateValue;
+                }
                 break;
             }
             case "docNumber": {
-                oldPassArray[index].passportNumber = value;
                 passArray[index].DocumentNumber = value;
                 break;
             }
 
             case "citizenship": {
-                oldPassArray[index].passportNumber = value;
                 passArray[index].Citizenship = value;
                 break;
             }
             case "docType": {
-                oldPassArray[index].passportNumber = value;
                 passArray[index].DocumentId = value;
                 break;
             }
             case "tariff": {
-                oldPassArray[index].passportNumber = value;
                 passArray[index].TarifId = Number(value);
+                break;
+            }
+            case "gender": {
+                passArray[index].Gender = value==="male"?"M":"F";
                 break;
             }
 
         }
-
         setPassengers(passArray);
-        setOldPassengers(oldPassArray)
-        console.log("After setpassengers", oldPassArray[index].dateOfBirth);
     }
 
 
@@ -390,7 +342,6 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
                                   currencies={routeInfo.Result.Route?.Price}
                                   setCurrentCurrency={setCurrentCurrency}
                                   paySystems={routeInfo.Result.PaySystems}
-
                                   updateContactHandler={function (): {} {
                                       throw new Error("Function not implemented.");
                                   }}/>

@@ -4,21 +4,18 @@ import {DateService} from "../../services/DateService";
 
 type InputDateProps = {
     inputDate?: string
-    setDateHandler: (dateIso: string) => void;
+    setDateHandler: (date: Date | undefined) => void;
+    //setDate: (date: Date) => void;
     dateLabel?: string;
 }
 
 //get and return date in ISO string format
-export function InputDate ({inputDate, dateLabel,setDateHandler}: InputDateProps) {
+export function InputDate({inputDate, dateLabel, setDateHandler}: InputDateProps) {
 
-    const { convertDateForForm}= DateService()
-
-  //  const [inputTextDate, setInputTextDate] = useState(inputDateISO !== "" ? new Date().toString() : "");
-
+    const {convertDateForForm} = DateService()
     const [textDate, setTextDate] = useState("");
-    const [date, setDate] = useState<Date|undefined>(undefined);
+    const [date, setDate] = useState<Date | undefined>(undefined);
     const [showError, setShowError] = useState(false);
-    const [label, setLabel] = useState<string>("")
 
     const parseDateHandler = (inputDate: string) => {
 
@@ -28,33 +25,50 @@ export function InputDate ({inputDate, dateLabel,setDateHandler}: InputDateProps
             const month = inputDate.substring(2, 4);
             const year = inputDate.substring(4, 8);
             let newDate = new Date(Number(year), Number(month) - 1, Number(date))
-            //setInputTextDate(newDate.toDateString());
-            //console.log(`before set date input: ${inputDate}; date: ${date}; month ${month}`)
-            setDateHandler(newDate.toISOString());
-            //console.log("new date", newDate)
-        }else{
+            setDateHandler(newDate);
+        } else {
             alert('Неправильный формат даты');
-            //setInputTextDate("");
         }
     }
 
-    const setDateByKeyInput = (value:string)=>{
+    const regDateDefault = new RegExp("[0-9]{8}");
+    const regDatePicker = new RegExp("[0-9]{2}(\\W)[0-9]{2}(\\W)[0-9]{4}");
+
+    const setDateByKeyInput = (value: string) => {
         setTextDate(value);
-        if(
-            value.length === 8
-        ){
+
+        if (
+            value.length === 8 && regDateDefault.test(value)
+        ) {
+            //// console.log("Date 8", value);
             const date = value.substring(0, 2);
             const month = value.substring(2, 4);
             const year = value.substring(4, 8);
-            let newDate = new Date(Number(year), Number(month) - 1, Number(date))
-            setDate(newDate)
+            const newDate = new Date(Number(year), Number(month) - 1, Number(date));
+            setDate(newDate);
             setTextDate(convertDateForForm(newDate));
-            console.log("Date:",newDate.toISOString());
-            console.log("text date",newDate.toISOString());
+            setDateHandler(newDate);
+            // console.log("Date:", newDate.toISOString());
+            // console.log("text date", newDate.toISOString());
+        }
+        if (value.length === 10 && regDatePicker.test(value)) {
+            //console.log("Date 10", value);
+
+            const dateArr = value.split("-");
+
+            const date = dateArr[0];
+            const month = dateArr[1];
+            const year = dateArr[2];
+            const newDate = new Date(Number(year), Number(month) - 1, Number(date));
+            setDate(newDate);
+            setTextDate(convertDateForForm(newDate));
+            setDateHandler(newDate);
+            // console.log("Date:", newDate.toISOString());
+            // console.log("text date", newDate.toISOString());
         }
         //ToDo uupfsdate
-        if(value.length > 8){
-            setDate(undefined)
+        if (value.length > 8) {
+            setDate(undefined);
             setShowError(true);
         }
     }
@@ -67,8 +81,8 @@ export function InputDate ({inputDate, dateLabel,setDateHandler}: InputDateProps
         if (regDate.test(date)) {
             const dateArr = date.split('-');
             const newDate = new Date(Number(dateArr[0]), Number(dateArr[1]), Number(dateArr[2]));
-           // setInputTextDate(newDate.toDateString());
-            setDateHandler(newDate.toISOString());
+            // setInputTextDate(newDate.toDateString());
+            setDateHandler(newDate);
             //new
             setDate(new Date());
             setTextDate(convertDateForForm(newDate));
@@ -76,14 +90,14 @@ export function InputDate ({inputDate, dateLabel,setDateHandler}: InputDateProps
     }
 
     const clearDate = () => {
-       // setInputTextDate("");
-        setDateHandler("");
+        // setInputTextDate("");
+        setDateHandler(undefined);
         //new
         setDate(undefined);
         setTextDate("")
     }
     useEffect(() => {
-       // setInputTextDate(inputDateISO !== "" ? new Date(inputDateISO!).toDateString() : "")
+        // setInputTextDate(inputDateISO !== "" ? new Date(inputDateISO!).toDateString() : "")
 
     }, [inputDate]);
 
