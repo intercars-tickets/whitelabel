@@ -5,6 +5,7 @@ import {DateService} from "../../services/DateService";
 type InputDateProps = {
     inputDate?: string
     setDateHandler: (date: Date | undefined) => void;
+
     //setDate: (date: Date) => void;
     dateLabel?: string;
 }

@@ -23,11 +23,11 @@ export function RouteItem({route,bookRoute}: RouteItemProps) {
     // const {parseTimeFromDate} =DateService()
     const [showAdditional, setShowAdditional] = useState(false);
 
-    const dateDepart = route.DepartDateTime as Date;
+   const dateDepart = route.DepartDateTime as Date;
 
-    const routeDuration = "Время в пути: " + route.Hour + " ч." + (route.Minuts === "0" ? "" : route.Minuts + " минут.");
+   const routeDuration = "Время в пути: " + route.Hour + " ч." + (route.Minuts === "0" ? "" : route.Minuts + " минут.");
 
-    const price = route.Price[0].Ptar + " " + route.Price[0].CurrencyName;
+   const price = route.Price[0].Ptar + " " + route.Price[0].CurrencyName;
 
     return (<>
             <div className="intercars-route-container">
@@ -42,7 +42,8 @@ export function RouteItem({route,bookRoute}: RouteItemProps) {
                                 <div typeof="time">{route.TimeDepart}</div>
                             </div>
                             <div className="intercars-route-data-item__middle">
-                                <div style={{zIndex:"100"}}>{routeDuration}</div>
+                                <div style={{zIndex: "100"}}>{"routeDuration"}</div>
+                                {/*<div style={{zIndex: "100"}}>{routeDuration}</div>*/}
                                 <div><DirectionIcon/></div>
                                 <div className="intercars-bus-route-icon"><BusIcon iconSize="50px"/></div>
                             </div>
@@ -77,6 +78,7 @@ export function RouteItem({route,bookRoute}: RouteItemProps) {
                                 <div className="intercars-route-data-item__middle">
                                 </div>
                                 <div className="intercars-route-data-item__last">
+                                    {route.BusOptions &&
                                     <div typeof="icons">
                                         <WifiIcon iconSize="24px"/>
                                         {route.BusOptions.some(opt => opt.Name === "IsUSB") &&
@@ -84,7 +86,7 @@ export function RouteItem({route,bookRoute}: RouteItemProps) {
                                         {route.BusOptions.some(opt => opt.Name === "IsBaggage") &&
                                             <SuitCaseIcon iconSize="24px"/>}
                                         <AirConditionerIcon iconSize="24px"/>
-                                    </div>
+                                    </div>}
                                 </div>
                             </div>
                         </div>
@@ -108,7 +110,7 @@ export function RouteItem({route,bookRoute}: RouteItemProps) {
                         {/*    Лучшая цена*/}
                         {/*</div>*/}
                         <div typeof="price">
-                            {price}
+                            {/*{price}*/}""
                         </div>
                         <button name="select-ticket" onClick={() => {
                             bookRoute(route)

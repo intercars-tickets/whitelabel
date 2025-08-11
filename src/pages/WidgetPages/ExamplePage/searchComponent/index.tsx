@@ -16,7 +16,7 @@ const moscowCity: City = {
 type SearchComponentProps = {
     departureDate: Date;
     setDepartureDate: (date: Date) => void;
-    runSearch: (request: SearchRouteRequest) => void;
+    runSearch:(request: SearchRouteRequest) => void;
     isSearching: boolean;
     setError: (error: { [key: string]: string }) => void;
 
@@ -111,9 +111,13 @@ export function SearchComponent(props: SearchComponentProps) {
         console.log("run search searchComponet", departureDate)
 
         setIsSearching(true);
-        const response = await props.runSearch(request);
-        console.log('search response', response)
+       await  props.runSearch(request);
+
         setIsSearching(false);
+
+
+        //console.log('search response', response)
+        //setIsSearching(false);
     }
 
     const inputCityHandler = async (partCityName: string, point: "from" | "to") => {

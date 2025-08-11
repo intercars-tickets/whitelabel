@@ -10,6 +10,8 @@ import {BookRouteComponent} from "./bookRouteComponent";
 import {CreateTicket} from "./createTicket";
 import {GetRouteRequest} from "../../../models/Routes/GetRouteRequest";
 import {BookingRouteInfo} from "../../../models/Routes/BookingRouteInfo";
+import {RedirectInfo} from "./redirectInfo";
+import {arrayBuffer} from "node:stream/consumers";
 
 enum WidgetSections {
     Search = 0,
@@ -83,9 +85,16 @@ export function ExamplePage() {
 
     const searchRoutesHandler = async (request: SearchRouteRequest) => {
 
-
         const response = await searchRoutes(request)
         console.log("Search route Response ExamplePage", response)
+
+        //ToDo show Message
+        if(response.Result === undefined) {
+
+            console.log("SearchRouteHandler",response.Error)
+            setIsSearching(false);
+            return;
+        }
 
 
         setIsSearching(false);
@@ -157,6 +166,7 @@ export function ExamplePage() {
             {/*<div style={{paddingTop:"16px"}}><RouteItem/></div>*/}
 
             {/*<button onClick={searchRoutesHandler}>Search</button>*/}
+            <RedirectInfo paymentUrl={""}/>
         </div>
 
 

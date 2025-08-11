@@ -13,6 +13,8 @@ import {ValidateService} from "../../../../services/ValidateService";
 import {BookTicketRequest} from "../../../../models/Booking/BookTicketRequest";
 import {BookingRouteInfo} from "../../../../models/Routes/BookingRouteInfo";
 import {PaxItem} from "../paxItem";
+import Timer from "../../../../components/timer/Timer";
+import {WidgetError} from "../../../../models/WidgetError";
 
 interface Passenger {
     firstName: string;
@@ -60,42 +62,45 @@ const defaultErrorState: BookError = {
     emailError: "Invalid email", phoneNumber1: "", phoneNumberError: ""
 }
 
+
 type Currency = {
     currencyCode: string;
     currencyName: string;
     currencyId: number;
 }
 
+const mailError : WidgetError = {
+    index: -1, message: "Error Mail", type: "email"
+}
+const phoneError : WidgetError = {
+    index: -1, message: "Error Phone 1", type: "phone"
+}
+
+const errorsTest :WidgetError[] = [mailError, phoneError]
+
 
 export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
     const {bookRoute, getTariffs, bookTickets} = WidgetApi();
     const {convertDateForForm, convertStringDateForForm} = DateService();
-    const {validateEmail} = ValidateService();
+    const {validateEmail,validateBookRequest} = ValidateService();
     const [passengers, setPassengers] = useState<BookPassengerInfo[]>([defaultPassenger]);
     const [oldPassengers, setOldPassengers] = useState<Passenger[]>([defaultOldPassenger]);
     const [selectedPlaces, setSelectedPlaces] = useState<IntercarsPlace[]>([]);
-    const [errors, setErrors] = useState<BookError>(defaultErrorState);
+    //const [errors, setErrors] = useState<BookError>(defaultErrorState);
     const [phoneNumber, setPhoneNumber] = useState("+375293763552");
     const [phoneNumberTwo, setPhoneNumberTwo] = useState("");
     const [clientEmail, setClientEmail] = useState("hinkevich@gmail.com");
     const [extraBaggage, setExtraBaggage] = useState(0);
-    const [currentCurrency, setCurrentCurrency] = useState("")
-
+    const [currentCurrency, setCurrentCurrency] = useState<number>(0)
+    const [paysystem,setPaySystem] = useState<string>("alfabankby");
+    const [hasSubscription, setHasSubscription] = useState<boolean>(false);
+    const [errors, setErrors] = useState<WidgetError[]>(errorsTest);
 
     const {convertToDateFromForm}=DateService();
     //console.log(routeInfo.Result.Route?.Id)
     //console.log(searchId)
 
     const userId = 'd02ae181-c17a-42e1-97be-e791cb20dd4b';
-
-    const validateHandler = () => {
-        //validateEmail
-        const isValidEmail = validateEmail(clientEmail);
-        if (!isValidEmail) {
-            setErrors({...errors, emailError: "Неправильный формат Email."})
-        }
-    }
-
 
     const mapPassengers = (passengers: Passenger) => {
     }
@@ -125,36 +130,46 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
             }));
         return (currencies);
     }
-
     //bookTickets
     const bookHandler = async () => {
+        setSelectedPlaces([]);
+
         let request: BookTicketRequest = {
             analytics: {
                 GoogleClientId: "",
                 Refferer: "http://localhost:3000/",
                 Url: "http://localhost:3000/create-tickets"
             },
-            currencyId: 1,
+            currencyId: currentCurrency,
             email: clientEmail,
             extraBaggage: extraBaggage,
-            hasSubscription: true,
+            hasSubscription: hasSubscription,
             lang: "RUS",
             note: "",
             passengers: passengers,
-            paySystem: "alfabankby",
-            phone: "+375293763552",
-            phoneTwo: "",
+            paySystem:paysystem,
+            //paySystem: "alfabankby",
+            phone: phoneNumber,
+            phoneTwo: phoneNumber,
             promoCode: "",
             routeId: routeInfo.Result.Route?.Id ?? "",
             searchId: searchId,
             siteVersionId: 1,
             userId: "IntercarsTestWidget"
         }
-        let tarif = routeInfo.Result.Route.Price.find(p => p.CurrencyName === currentCurrency);
+        let tarif = routeInfo.Result.Route.Price.find(p => p.Currency === currentCurrency);
 
         request.passengers.forEach((passenger) => {
             passenger.TarifId = tarif?.Currency ?? routeInfo.Result.Route.Price[0].Currency;
         })
+
+        let validateErrors = validateBookRequest(request);
+
+        if (validateErrors!==undefined && validateErrors?.length > 0) {
+            setErrors(validateErrors);
+            console.log("validateErrors", validateErrors);
+            return;
+        }
 
 
         const response = await bookTickets(request);
@@ -236,6 +251,32 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
         setPassengers(passArray);
     }
 
+    const updateContactInfo = (value: string, type: string) => {
+        switch (type) {
+            case "phone":{
+                setPhoneNumber(value);
+                break;
+            }
+
+            case "phone2":{
+                setPhoneNumberTwo(value);
+                break;
+            }
+            case "email":{
+                setClientEmail(value);
+                break;
+            }
+            case "currency":{
+                setCurrentCurrency(Number(value));
+                break;
+            }
+            case "paySystem":{
+                setPaySystem(value)
+                break;
+            }
+        }
+
+    }
 
     let places = FullBusPlaces;
 
@@ -291,7 +332,8 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
                 {/*Info row*/}
                 <div className="intercars-book-route-info-sub-container__wide">
                     <div typeof="main-direction">{routeInfo.Result.Route?.Route} </div>
-                    <div typeof="timer"> Врем оформления заказа</div>
+                    {/*<div typeof="timer"> Врем оформления заказа </div>*/}
+                    <Timer isTicketPage={true}/>
                 </div>
                 {/*Departure, arrive Info row*/}
                 <div className="intercars-book-route-info-sub-container__wide">
@@ -318,6 +360,8 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
                     <div style={{gap: "6px"}}>
                         {passengers && passengers.map((passenger, index) => {
                             return (<PaxItem
+                                    errors={errors}
+                                   updateErrors={setErrors}
                                     paxCount={oldPassengers.length}
                                     index={index}
                                     pax={passenger}
@@ -331,20 +375,17 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
                         }
 
                     </div>
-
                     <BusTicket busPlaces={sortedArrays} countUser={oldPassengers.length}
                                handlePlaceSelection={setSelectedPlaces}/>
-                    {errors.emailError && <p>{errors.emailError}</p>}
-                    <ContactsUser emailError={errors.emailError}
+                    {/*{errors.emailError && <p>{errors.emailError}</p>}*/}
+                    <ContactsUser errors={errors}
+                                  updateErrors={setErrors}
                                   email={""}
                                   phoneNumber1={phoneNumber}
                                   phoneNumber2={phoneNumberTwo}
                                   currencies={routeInfo.Result.Route?.Price}
-                                  setCurrentCurrency={setCurrentCurrency}
                                   paySystems={routeInfo.Result.PaySystems}
-                                  updateContactHandler={function (): {} {
-                                      throw new Error("Function not implemented.");
-                                  }}/>
+                                  updateContactHandler={updateContactInfo} />
                     <button type="button"
                             onClick={async () => {
                                 await bookHandler();
@@ -354,12 +395,12 @@ export function BookRouteComponent({searchId, routeInfo}: BookRouteProps) {
                     <Button title="Book" onClick={()=>{
                         console.log("PaxDate",passengers[0]);
                         console.log("CurrentCurrency",currentCurrency);
+                        console.log("PhoneNumber",phoneNumber);
+                        console.log("email",clientEmail)
+                        console.log("emcurrencyl",currentCurrency)
                     }}/>
                 </form>
-
-
             </div>
-
         </>
     )
 }

@@ -1,3 +1,5 @@
+@import "../../../../scss/media";
+
 input[name='last']::-webkit-calendar-picker-indicator {
   padding-left:75px;
 }
@@ -28,6 +30,12 @@ $main-color:#ffffff;
   width: 100%;
   background-color: $background-color;
   padding: 2px 0 0 24px;
+  @include commonMobile{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .search-component-popUpSubContainer {
@@ -43,6 +51,10 @@ $main-color:#ffffff;
   border: 1px solid lightgrey;
 
   ul {
+    @include commonMobile{
+     display: none;
+    }
+
     //max-height: 350px;
     max-height: 250px;
     overflow-y: auto;
@@ -50,6 +62,9 @@ $main-color:#ffffff;
     padding: 4px 8px;
 
     li {
+      @include commonMobile{
+        display: none;
+      }
       font-size: 0.9rem;
       padding: 2px 16px;
       //height: 22px;
@@ -113,6 +128,7 @@ $main-color:#ffffff;
   top: 0;
   gap: 4px;
 
+
   .search-component-icon-sub-container {
     position: absolute;
     top: 46px;
@@ -121,10 +137,16 @@ $main-color:#ffffff;
     height: 32px;
     transform: translate(0px, 0px) scale(1.5);
     z-index: 10;
+    @include commonMobile{
+      transform: translate(0px, 45px) scale(1.5);
+    }
 
     &:active {
       transition: transform 0.1s;
       transform: translate(0px, 0px) scale(1.8);
+      @include commonMobile{
+        transform: translate(0px, 45px) scale(1.8);
+      }
     }
   }
 
@@ -163,22 +185,34 @@ $main-color:#ffffff;
     &[name="first"] {
       border-radius: 8px 0 0 8px;
       margin-right: 2px;
+      @include commonMobile{
+        border-radius: 8px ;
+      }
     }
 
     &[name="midle"] {
       border-radius: 0 0 0 0;
       z-index: 5;
       padding-left: 24px;
+      @include commonMobile{
+        border-radius: 8px ;
+      }
     }
 
     &[name="last"] {
       border-radius: 0 8px 8px 0;
+      @include commonMobile{
+        border-radius: 8px ;
+      }
 
     }
 
   }
 
   .example-item {
+    @include commonMobile{
+     display: none ;
+    }
     user-select: none;
     div[typeof="link"]{
       cursor: pointer;

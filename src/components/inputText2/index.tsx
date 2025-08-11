@@ -15,7 +15,6 @@ export function InputText2(props: InputText2Props) {
     const [inputText, setInputText] = useState(props.value);
     const [hasValue, setHasValue] = useState(props.value.length > 0);
 
-
     const isActive = (): boolean => {
 
 
@@ -28,7 +27,6 @@ export function InputText2(props: InputText2Props) {
         return false;
     }
     useEffect(() => {
-        console.log('InputText2 use effect', props.value);
         setInputText(props.value);
     }, [props.value]);
     // console.log("InputText2 ", props.value , isActive());
@@ -50,7 +48,6 @@ export function InputText2(props: InputText2Props) {
                        if (props.maxLength !== undefined && newValue.length >props.maxLength) {
                            setInputText(inputText);
                            return;
-                           // if (inputText.length === props.maxLength && e.target.value.length > props.maxLength)
                        }
 
                        setInputText(newValue);

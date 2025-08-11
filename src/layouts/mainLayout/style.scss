@@ -1,5 +1,6 @@
 @import "../../scss/default-variables";
 @import "../../scss/common-styles";
+@import "../../scss/media";
 
 .main-layout-container{
   display: flex;
@@ -11,6 +12,10 @@
 .main-sidebar {
   //width: 300px;
   height: 100%;
+  @include commonMobile{
+    display: none;
+  }
+
   //margin: 64px 0;
   //padding:  8px 16px;
 }

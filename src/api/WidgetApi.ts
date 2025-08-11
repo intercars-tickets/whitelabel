@@ -93,37 +93,46 @@ export function WidgetApi() {
     /**
      * POST method for signup
      * @param {RegisterUserRequest} request - request data
-     * @return {Promise<AxiosResponse<any>>} response with user info
+     * @return {Promise<SearchRouteResponse>} response with user info
      */
     const searchRoutes = async (request: SearchRouteRequest): Promise<SearchRouteResponse> => {
 
         let result: SearchRouteResponse;
 
-        const response = await fetch("https://localhost:44363" + "/api/v1/routes/search", {
-            //mode: "no-cors",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // Authorization: "Basic KzM3NTI5Mzc2MzU1MjpRV0VSVFkxMjM="
-            },
-            body: JSON.stringify(request)
-        })
+        try {
+            const response = await fetch("https://localhost:44363" + "/api/v1/routes/search", {
+                //mode: "no-cors",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // Authorization: "Basic KzM3NTI5Mzc2MzU1MjpRV0VSVFkxMjM="
+                },
+                body: JSON.stringify(request)
+            })
 
-        if (!response.ok) {
+            console.log("SearchRouteResponse", response)
+
+            if (!response.ok) {
+                return {
+                    Error: "Error",
+                    Result: undefined
+                }
+
+                // throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const jsonResult = await response.json();
+            console.log("Js RoutesApi", jsonResult);
+            result = JSON.parse(JSON.stringify(jsonResult, null, 2));
+
+            return result;
+
+        } catch(err) {
             return {
                 Error: "Error",
                 Result: undefined
             }
-
-            // throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        const jsonResult = await response.json();
-        console.log("Js RoutesApi", jsonResult);
-        result = JSON.parse(JSON.stringify(jsonResult, null, 2));
-
-        return result;
-
     }
 
        const getRouteInfo = async (request: GetRouteRequest): Promise<BookingRouteInfo> => {
